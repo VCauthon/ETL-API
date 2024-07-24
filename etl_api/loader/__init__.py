@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Type, List, Dict, Any
+from typing import Type, List, Dict
 
 from etl_api.loader.base import AbstractLoader
 
