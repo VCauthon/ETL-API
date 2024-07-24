@@ -1,6 +1,6 @@
-
+from dataclasses import dataclass
 from enum import Enum
-from typing import Union, Type, Dict
+from typing import Union, Type, Dict, Any
 
 from pandas import DataFrame
 
@@ -29,6 +29,13 @@ class _TransformerFactory:
 
 
 class Transformer:
+
+    @dataclass
+    class Arguments:
+        type: TransformationTypes
+        data_raw = None
+        data_schema = None
+
     @staticmethod
     def transform(
             type: TransformationTypes,

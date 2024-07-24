@@ -7,6 +7,7 @@ from etl_api.extractor import Extractor, ExtractionTypes
 from etl_api.extractor.base import AbstractExtractor
 
 # TODO: Add a concrete error for the modules
+# TODO: Add a test to check that get_context_needed returns the expected values
 
 class TestExtractor:
     
@@ -15,6 +16,10 @@ class TestExtractor:
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self._retrieve_data(**kwargs)
+
+        @classmethod
+        def get_context_needed(cls) -> None:
+            ...
 
         def _retrieve_data(self, dummy: str = None) -> None:
             self._data_raw = {"mock_key": "mock_value"}
@@ -57,14 +62,14 @@ class TestExtractorYahooFinance:
 
     @patch('etl_api.extractor.yahoofinance.yf.Ticker', return_value=MockTicker())
     def test_extract_with_context(self, mock_yf):
-        raw_data, schema = Extractor.extract(ExtractionTypes.YahooFinance, ticket="MSFT", action="history", period="1mo")
+        raw_data, schema = Extractor.extract(ExtractionTypes.YahooFinance, ticker="MSFT", period="1mo")
         assert isinstance(raw_data, pd.DataFrame)
         assert schema is pd.DataFrame
 
     @patch('etl_api.extractor.yahoofinance.yf.Ticker', return_value=MockTicker())
     def test_raise_error_extract_without_context(self, mock_yf):
         with pytest.raises(TypeError):
-            Extractor.extract(ExtractionTypes.YahooFinance, action="history")
+            Extractor.extract(ExtractionTypes.YahooFinance)
 
 if __name__ == "__main__":
     pytest.main()
