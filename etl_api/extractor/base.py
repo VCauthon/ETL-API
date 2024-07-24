@@ -1,7 +1,9 @@
+from typing import List
 from abc import ABC, abstractmethod
 
-
 from pandas import DataFrame
+
+from etl_api.base import ModuleConfiguration, ModuleDetail
 
 
 class AbstractExtractor(ABC):
@@ -12,6 +14,12 @@ class AbstractExtractor(ABC):
     @abstractmethod
     def _retrieve_data(self) -> DataFrame:
         # Sets the _data_raw and _data_schema
+        ...
+
+    @classmethod
+    @abstractmethod
+    def get_context_needed(cls) -> ModuleDetail:
+        # Returns the parameters that the module will need
         ...
 
     @property
