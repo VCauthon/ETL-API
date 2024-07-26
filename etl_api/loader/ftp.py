@@ -1,6 +1,6 @@
-
 from etl_api.loader.base import AbstractLoader
 from etl_api.base import ModuleDetail
+
 
 class FTP(AbstractLoader):
     @staticmethod
@@ -10,6 +10,5 @@ class FTP(AbstractLoader):
     @classmethod
     def get_context_needed(cls):
         return ModuleDetail(
-            name=FTP.__name__,
-            description="Load the results into an FTP"
+            name=FTP.__name__, description="Load the results into an FTP"
         )

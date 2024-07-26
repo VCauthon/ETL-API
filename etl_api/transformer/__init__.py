@@ -16,20 +16,18 @@ class TransformationTypes(Enum):
 
 
 class _TransformerFactory:
-
     @staticmethod
-    def create_transformer(data_raw, data_schema) -> Type['AbstractTransformation']:
+    def create_transformer(data_raw, data_schema) -> Type["AbstractTransformation"]:
         if isinstance(data_raw, DataFrame):
             class_selected = DataFrameTransformation
         elif isinstance(data_raw, dict):
             class_selected = DictTransformation
         else:
-            raise ValueError('The type of data retrieved can\'t be transformed')
+            raise ValueError("The type of data retrieved can't be transformed")
         return class_selected(data_raw, data_schema)
 
 
 class Transformer:
-
     @dataclass
     class Arguments:
         type: TransformationTypes
@@ -38,11 +36,12 @@ class Transformer:
 
     @staticmethod
     def transform(
-            type: TransformationTypes,
-            data_raw: Union[dict, DataFrame],
-            data_schema: Dict[str, Union[dict, str]] = None):
+        type: TransformationTypes,
+        data_raw: Union[dict, DataFrame],
+        data_schema: Dict[str, Union[dict, str]] = None,
+    ):
         if type not in TransformationTypes:
-            raise ValueError("The type of transformation doesn\'t exist")
+            raise ValueError("The type of transformation doesn't exist")
 
         transformer = _TransformerFactory.create_transformer(data_raw, data_schema)
         if type == TransformationTypes.JSON:

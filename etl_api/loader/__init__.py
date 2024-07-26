@@ -17,14 +17,16 @@ class LoaderType(Enum):
 class _LoaderFactory:
     _loader_map: Dict[str, AbstractLoader] = {
         LoaderType.RETURN_REQUEST: ReturnRequest,
-        LoaderType.FTP: FTP
+        LoaderType.FTP: FTP,
     }
 
     @classmethod
     def create_loader(cls, loader: LoaderType) -> Type[AbstractLoader]:
         extractor_class = cls._loader_map.get(loader)
         if extractor_class is None:
-            raise ValueError(f"No loader found for the given extraction type: {loader.value}")
+            raise ValueError(
+                f"No loader found for the given extraction type: {loader.value}"
+            )
         return extractor_class
 
     @classmethod
@@ -33,7 +35,6 @@ class _LoaderFactory:
 
 
 class Loader:
-
     @dataclass
     class Arguments:
         type: LoaderType
@@ -44,5 +45,9 @@ class Loader:
         return _LoaderFactory.create_loader(type).load(data)
 
     @staticmethod
-    def get_options() -> List[Dict[str, str]]:  # TODO: This is mandatory to a abstract class from base
-        return _LoaderFactory.list_modules()  # TODO: This object must be transformer into a dict to be able to jsonify
+    def get_options() -> (
+        List[Dict[str, str]]
+    ):  # TODO: This is mandatory to a abstract class from base
+        return (
+            _LoaderFactory.list_modules()
+        )  # TODO: This object must be transformer into a dict to be able to jsonify

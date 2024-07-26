@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from pandas import DataFrame
 
-from etl_api.base import ModuleConfiguration, ModuleDetail
+from etl_api.base import ModuleDetail
 
 
 class AbstractExtractor(ABC):

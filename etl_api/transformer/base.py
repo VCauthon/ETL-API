@@ -15,14 +15,15 @@ class ErrorTransformation(Exception):
                     return func(*args, **kwargs)
                 except concrete_error as c_error:
                     raise ErrorTransformation(message_error) from c_error
-                except Exception as b_error: 
+                except Exception as b_error:
                     raise b_error
+
             return args_wrapper
+
         return wrapper
 
 
 class AbstractTransformation(ABC):
-    
     def __init__(self, data: Any, schema: Dict[str, Union[dict, str]]) -> None:
         super().__init__()
         self.__data = data
@@ -34,12 +35,12 @@ class AbstractTransformation(ABC):
 
     @property
     def schema(self) -> Dict[str, Union[dict, str]]:
-        return self.__schema    
+        return self.__schema
 
     @abstractmethod
     def to_csv(self) -> str:
         ...
-    
+
     @abstractmethod
     def to_json(self) -> str:
         ...

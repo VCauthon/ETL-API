@@ -6,7 +6,7 @@ from typing import List
 class ModuleDetail:
     name: str
     description: str
-    config: List['ModuleConfiguration'] = None
+    config: List["ModuleConfiguration"] = None
     api_entry_point: bool = False
     url: str = None
 
@@ -18,7 +18,6 @@ class ModuleDetail:
         dict_version = asdict(self)
         dict_version.pop("api_entry_point")
         return {k: v for k, v in dict_version.items() if v is not None}
-        
 
 
 @dataclass
