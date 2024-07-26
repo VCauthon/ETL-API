@@ -19,16 +19,19 @@ class _ExtractorFactory:
     def create_extractor(cls, api: ExtractionTypes) -> Type[AbstractExtractor]:
         extractor_class = cls._extractor_map.get(api)
         if extractor_class is None:
-            raise ValueError(f"No extractor found for the given extraction type: {api.value}")
+            raise ValueError(
+                f"No extractor found for the given extraction type: {api.value}"
+            )
         return extractor_class
 
     @classmethod
     def list_modules(cls) -> List[ModuleDetail]:
-        return [module.get_context_needed() for module in cls._extractor_map.values()]  # TODO: That asdict must be handled throw its own dataclass
+        return [
+            module.get_context_needed() for module in cls._extractor_map.values()
+        ]  # TODO: That asdict must be handled throw its own dataclass
 
 
 class Extractor:  # TODO: This has to be an abstract class
-
     @dataclass
     class Arguments:
         api: ExtractionTypes
@@ -37,7 +40,9 @@ class Extractor:  # TODO: This has to be an abstract class
     @classmethod
     def extract(cls, api: ExtractionTypes, **kwargs) -> Tuple[Any, Dict[str, str]]:
         if api not in ExtractionTypes:
-            raise ValueError(f"Invalid extraction type: {api}. Must be a value from ExtractionTypes")
+            raise ValueError(
+                f"Invalid extraction type: {api}. Must be a value from ExtractionTypes"
+            )
 
         results_request = _ExtractorFactory.create_extractor(api)(**kwargs)
         return results_request.data_raw, results_request.data_schema

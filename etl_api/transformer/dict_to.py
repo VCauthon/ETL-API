@@ -11,14 +11,18 @@ class DictTransformation(AbstractTransformation):
         super().__init__(data, schema)
         self.data: dict
 
-    @ErrorTransformation.try_catch_handler("Wrong schema for the data retrieved", (KeyError))
+    @ErrorTransformation.try_catch_handler(
+        "Wrong schema for the data retrieved", (KeyError)
+    )
     def to_csv(self):
         flatten_data = {}
         for key, val in self.schema.items():
             flatten_data[key] = self.__get_data_from_schema(val, self.data)
         return DataFrame([flatten_data]).to_csv(index=False)
 
-    def __get_data_from_schema(self, val: Union[str, list, Any], all_data: Dict[str, str]):
+    def __get_data_from_schema(
+        self, val: Union[str, list, Any], all_data: Dict[str, str]
+    ):
         if isinstance(val, str):
             return all_data[val]
         elif isinstance(val, list):

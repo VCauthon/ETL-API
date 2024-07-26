@@ -1,11 +1,11 @@
 from pandas import DataFrame
 import yfinance as yf
 
-from etl_api.extractor.base import AbstractExtractor, ModuleDetail, ModuleConfiguration
+from etl_api.extractor.base import AbstractExtractor, ModuleDetail
+from etl_api.base import ModuleConfiguration
 
 
 class YahooFinance(AbstractExtractor):
-
     def __init__(self, **kwargs) -> None:
         super().__init__()
         self._retrieve_data(**kwargs)
@@ -23,14 +23,12 @@ class YahooFinance(AbstractExtractor):
             description="Get historical market data from a ticker or ISIN",
             config=[
                 ModuleConfiguration(
-                    name="ticker",
-                    type="str",
-                    desc="Ticker symbol or ISIN"
+                    name="ticker", type="str", desc="Ticker symbol or ISIN"
                 ),
                 ModuleConfiguration(
                     name="period",
                     type="str",
-                    desc="Time period from which the data will be retrieved"
-                )
-            ]
+                    desc="Time period from which the data will be retrieved",
+                ),
+            ],
         )
