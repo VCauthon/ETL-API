@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Type, Tuple, Dict, Any, List
+from typing import Type, Tuple, Dict, Any, List, overload, Union
 
 from etl_api.extractor.base import AbstractExtractor, ModuleDetail
 from etl_api.extractor.yahoofinance import YahooFinance
@@ -26,12 +26,10 @@ class _ExtractorFactory:
 
     @classmethod
     def list_modules(cls) -> List[ModuleDetail]:
-        return [
-            module.get_context_needed() for module in cls._extractor_map.values()
-        ]  # TODO: That asdict must be handled throw its own dataclass
+        return [module.get_context_needed() for module in cls._extractor_map.values()]
 
 
-class Extractor:  # TODO: This has to be an abstract class
+class Extractor:
     @dataclass
     class Arguments:
         api: ExtractionTypes
@@ -47,6 +45,23 @@ class Extractor:  # TODO: This has to be an abstract class
         results_request = _ExtractorFactory.create_extractor(api)(**kwargs)
         return results_request.data_raw, results_request.data_schema
 
+    @overload
     @staticmethod
-    def get_options() -> List[Dict[str, str]]:
-        return _ExtractorFactory.list_modules()
+    def get_options() -> List[ModuleDetail]:
+        ...
+
+    @overload
+    @staticmethod
+    def get_options(module_details: ExtractionTypes) -> ModuleDetail:
+        ...
+
+    @staticmethod
+    def get_options(
+        module_details: Union[None, ExtractionTypes] = None
+    ) -> Union[List[ModuleDetail], ModuleDetail]:
+        all_modules = _ExtractorFactory.list_modules()
+
+        if module_details is None:
+            return all_modules
+
+        return next(val for val in all_modules if val.name == module_details.value)

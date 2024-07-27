@@ -17,7 +17,7 @@ class AbstractExtractor(ABC):
 
     @classmethod
     @abstractmethod
-    def get_context_needed(cls) -> ModuleDetail:
+    def get_context_needed(cls, type) -> ModuleDetail:
         # Returns the parameters that the module will need
         ...
 

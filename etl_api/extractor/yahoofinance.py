@@ -18,7 +18,6 @@ class YahooFinance(AbstractExtractor):
     @classmethod
     def get_context_needed(cls) -> ModuleDetail:
         return ModuleDetail(
-            api_entry_point=True,
             name=YahooFinance.__name__,
             description="Get historical market data from a ticker or ISIN",
             config=[
