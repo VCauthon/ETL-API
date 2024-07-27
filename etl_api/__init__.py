@@ -10,6 +10,11 @@ from etl_api.loader import Loader, LoaderType
 app = Flask(__name__)
 
 
+# TODO: add codecoverage to check that a % of the code has been tested (remember to update the project to check that in the PR)
+# TODO: add a logger
+# TODO: add other system to retrieve data API-ETL
+# TODO: workflow to deploy from dev to pro and upgrading version
+
 class ETLPipeline:
     def __init__(
         self,
