@@ -48,5 +48,11 @@ class TestReturnRequest:
             assert response.json == DUMMY_DICT
 
 
+class TestFTP:
+    def test_loader_without_context(self):
+        with pytest.raises(NotImplementedError):
+            Loader.load(type=LoaderType.FTP, data=DUMMY_DICT)
+
+
 if __name__ == "__main__":
     pytest.main()
