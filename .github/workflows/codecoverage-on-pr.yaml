@@ -1,0 +1,36 @@
+name: Check code coverage on Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Code Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10.14'
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run test with coverage
+      run: |
+        pytest --cov --cov-report=xml
+
+    - name: Check results report
+      run: |
+        python .github/workflows/check_code_coverage.py
+      env:
+        MIN_COVERAGE: 0.8
+
+      continue-on-error: false
