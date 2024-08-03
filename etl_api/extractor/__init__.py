@@ -6,6 +6,10 @@ from etl_api.extractor.base import AbstractExtractor, ModuleDetail
 from etl_api.extractor.yahoofinance import YahooFinance
 
 
+# TODO: Add an extraction from a sql system
+# TODO: Add an extraction from a csv
+
+
 class ExtractionTypes(Enum):
     YahooFinance = "YahooFinance"
 
