@@ -1,7 +1,8 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from flask.testing import FlaskClient
-from etl_api import app
+
+from etl_api.app import app
 
 
 @pytest.fixture
@@ -12,7 +13,7 @@ def client() -> FlaskClient:  # type: ignore
 
 @pytest.fixture
 def mock_extractor():
-    with patch("etl_api.Extractor") as mock:
+    with patch("etl_api.app.Extractor") as mock:
         mock.Arguments.return_value = MagicMock()
         mock.extract.return_value = (
             {"sample_data": "data"},
@@ -23,7 +24,7 @@ def mock_extractor():
 
 @pytest.fixture
 def mock_transformer():
-    with patch("etl_api.Transformer") as mock:
+    with patch("etl_api.app.Transformer") as mock:
         mock.Arguments.return_value = MagicMock()
         mock.transform.return_value = {"transformed_data": "data"}
         yield mock
@@ -31,7 +32,7 @@ def mock_transformer():
 
 @pytest.fixture
 def mock_loader():
-    with patch("etl_api.Loader") as mock:
+    with patch("etl_api.app.Loader") as mock:
         mock.Arguments.return_value = MagicMock()
         mock.load.return_value = {"status": "success"}
         yield mock
