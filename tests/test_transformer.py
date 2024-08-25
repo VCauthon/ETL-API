@@ -1,7 +1,10 @@
 import pytest
 
+import io
+import csv
 from pandas import DataFrame
 
+from etl_api.base import DataTypes
 from etl_api.transformer import Transformer, TransformationTypes
 from etl_api.transformer.base import ErrorTransformation
 
@@ -33,9 +36,23 @@ DUMMY_DATAFRAME = DataFrame(
 )
 
 
+@pytest.fixture
+def DUMMY_CSV_RAW():
+        string_output = io.StringIO()
+        writer = csv.writer(string_output)
+
+        # Write some dummy data
+        writer.writerow(['Column1', 'Column2', 'Column3'])
+        writer.writerow(['Data1', 'Data2', 'Data3'])
+        writer.writerow(['Data4', 'Data5', 'Data6'])
+        
+        # Get the string content from the StringIO object
+        return string_output.getvalue()
+
+
 class TestTransformer:
     def test_transformation_exist(self):
-        assert Transformer.transform(TransformationTypes.JSON, DUMMY_DATAFRAME)
+        assert Transformer.transform(TransformationTypes.JSON, DUMMY_DATAFRAME, DataTypes.DATAFRAME)
 
     def test_raise_error_transformation_not_exist(self):
         with pytest.raises(ValueError):
@@ -47,19 +64,19 @@ class TestTransformer:
 class TestTransformerDataFrame:
     def test_transform_to_json(self):
         assert isinstance(
-            Transformer.transform(TransformationTypes.JSON, DUMMY_DATAFRAME), str
+            Transformer.transform(TransformationTypes.JSON, DUMMY_DATAFRAME, DataTypes.DATAFRAME), str
         )
 
     def test_transform_to_csv(self):
         assert isinstance(
-            Transformer.transform(TransformationTypes.CSV, DUMMY_DATAFRAME), str
+            Transformer.transform(TransformationTypes.CSV, DUMMY_DATAFRAME, DataTypes.DATAFRAME), str
         )
 
 
 class TestTransformerDict:
     def test_transform_to_json(self):
         assert isinstance(
-            Transformer.transform(TransformationTypes.JSON, DUMMY_DICT), str
+            Transformer.transform(TransformationTypes.JSON, DUMMY_DICT, DataTypes.DICT), str
         )
 
     def test_transform_to_csv(self):
@@ -74,14 +91,26 @@ class TestTransformerDict:
             "preferences": "preferences",
         }
         assert isinstance(
-            Transformer.transform(TransformationTypes.CSV, DUMMY_DICT, schema), str
+            Transformer.transform(TransformationTypes.CSV, DUMMY_DICT, DataTypes.DICT, schema), str
         )
 
     def test_raise_error_transform_to_csv_wrong_schema(self):
         with pytest.raises(ErrorTransformation):
             Transformer.transform(
-                TransformationTypes.CSV, DUMMY_DICT, {"wrong": "wrong"}
+                TransformationTypes.CSV, DUMMY_DICT, DataTypes.DICT, {"wrong": "wrong"}
             )
+
+
+class TestTransformerCSV:
+    def test_transform_to_json(self, DUMMY_CSV_RAW: str):
+        assert isinstance(
+            Transformer.transform(TransformationTypes.JSON, DUMMY_CSV_RAW, DataTypes.CSV), str
+        )
+
+    def test_transform_to_csv(self, DUMMY_CSV_RAW: str):
+        assert isinstance(
+            Transformer.transform(TransformationTypes.CSV, DUMMY_CSV_RAW, DataTypes.CSV), str
+        )
 
 
 if __name__ == "__main__":

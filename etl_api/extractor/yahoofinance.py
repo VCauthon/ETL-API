@@ -2,7 +2,7 @@ from pandas import DataFrame
 import yfinance as yf
 
 from etl_api.extractor.base import AbstractExtractor, ModuleDetail
-from etl_api.base import ModuleConfiguration
+from etl_api.base import ModuleConfiguration, DataTypes
 
 
 class YahooFinance(AbstractExtractor):
@@ -13,7 +13,7 @@ class YahooFinance(AbstractExtractor):
     def _retrieve_data(self, ticker: str, period: str) -> None:
         obj_yf = yf.Ticker(ticker)
         self._data_raw = obj_yf.history(period=period)
-        self._data_schema = DataFrame
+        self._data_type = DataTypes.DATAFRAME
 
     @classmethod
     def get_context_needed(cls) -> ModuleDetail:

@@ -4,15 +4,18 @@ from typing import Type, Tuple, Dict, Any, List, overload, Union
 
 from etl_api.extractor.base import AbstractExtractor, ModuleDetail
 from etl_api.extractor.yahoofinance import YahooFinance
+from etl_api.extractor.request import Request
 
 
 class ExtractionTypes(Enum):
     YahooFinance = "YahooFinance"
+    Request = "Request"
 
 
 class _ExtractorFactory:
     _extractor_map: Dict[str, AbstractExtractor] = {
-        ExtractionTypes.YahooFinance: YahooFinance
+        ExtractionTypes.YahooFinance: YahooFinance,
+        ExtractionTypes.Request: Request,
     }
 
     @classmethod
